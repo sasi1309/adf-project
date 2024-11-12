@@ -131,7 +131,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "ds_bl_book_data",
+									"referenceName": "DelimitedText2",
 									"type": "DatasetReference",
 									"parameters": {
 										"files": {
@@ -177,8 +177,6 @@
 				]
 			}
 		},
-		"annotations": [],
-		"lastPublishTime": "2024-11-12T08:08:41Z"
-	},
-	"type": "Microsoft.DataFactory/factories/pipelines"
+		"annotations": []
+	}
 }

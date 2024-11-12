@@ -51,6 +51,5 @@
 			"schema": "PUBLIC",
 			"table": "SILVER_SALES"
 		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	}
 }

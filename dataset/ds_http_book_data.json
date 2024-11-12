@@ -1,0 +1,30 @@
+{
+	"name": "ds_http_book_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_http_book_data",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"files": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@dataset().files",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

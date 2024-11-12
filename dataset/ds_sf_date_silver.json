@@ -39,6 +39,5 @@
 			"schema": "PUBLIC",
 			"table": "SILVER_DATE"
 		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	}
 }
