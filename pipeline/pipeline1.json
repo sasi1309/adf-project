@@ -1,0 +1,184 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.files",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "SnowflakeV2Sink",
+									"preCopyScript": "\n",
+									"importSettings": {
+										"type": "SnowflakeImportCopyCommand"
+									}
+								},
+								"enableStaging": true,
+								"stagingSettings": {
+									"linkedServiceName": {
+										"referenceName": "linkedService2",
+										"type": "LinkedServiceReference"
+									},
+									"path": "book"
+								},
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "Book_ID",
+												"type": "String"
+											},
+											"sink": {
+												"name": "BOOK_ID",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Book_Title",
+												"type": "String"
+											},
+											"sink": {
+												"name": "BOOK_TITLE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Author",
+												"type": "String"
+											},
+											"sink": {
+												"name": "AUTHOR",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Genre",
+												"type": "String"
+											},
+											"sink": {
+												"name": "GENRE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Publisher",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PUBLISHER",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Price",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PRICE",
+												"type": "Int64"
+											}
+										},
+										{
+											"source": {
+												"name": "ISBN",
+												"type": "String"
+											},
+											"sink": {
+												"name": "ISBN",
+												"type": "String"
+											}
+										}
+									]
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_bl_book_data",
+									"type": "DatasetReference",
+									"parameters": {
+										"files": {
+											"value": "@replace(item(), '\"', '')",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_sf_book_data",
+									"type": "DatasetReference",
+									"parameters": {
+										"TableName": "SILVER_BOOK"
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"files": {
+				"type": "array",
+				"defaultValue": [
+					"Book.csv",
+					"Customer.csv",
+					"Date (1).csv",
+					"Store.csv",
+					"Sales.csv"
+				]
+			},
+			"tables": {
+				"type": "array",
+				"defaultValue": [
+					"Book",
+					"Customer",
+					"Date",
+					"Store",
+					"Sales"
+				]
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-11-12T08:08:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

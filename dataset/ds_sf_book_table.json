@@ -1,0 +1,48 @@
+{
+	"name": "ds_sf_book_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sf_book_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "BOOK_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "BOOK_TITLE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "AUTHOR",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "GENRE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PUBLISHER",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PRICE",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "ISBN",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "PUBLIC",
+			"table": "SILVER_BOOK"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

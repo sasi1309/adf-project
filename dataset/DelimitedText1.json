@@ -1,0 +1,53 @@
+{
+	"name": "DelimitedText1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_bl_book_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Book.csv",
+				"container": "book"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Book_ID",
+				"type": "String"
+			},
+			{
+				"name": "Book_Title",
+				"type": "String"
+			},
+			{
+				"name": "Author",
+				"type": "String"
+			},
+			{
+				"name": "Genre",
+				"type": "String"
+			},
+			{
+				"name": "Publisher",
+				"type": "String"
+			},
+			{
+				"name": "Price",
+				"type": "String"
+			},
+			{
+				"name": "ISBN",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

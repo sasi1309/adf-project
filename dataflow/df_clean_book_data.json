@@ -1,0 +1,204 @@
+{
+	"name": "df_clean_book_data",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_bl_books_data",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_bl_customer_data",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_bl_date_data",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_bl_sales_data",
+						"type": "DatasetReference"
+					},
+					"name": "source4"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sf_book_table",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sf_customer",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sf_date_silver",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sf_sales_silver",
+						"type": "DatasetReference"
+					},
+					"name": "sink4"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          Book_ID as string,",
+				"          Book_Title as string,",
+				"          Author as string,",
+				"          Genre as string,",
+				"          Publisher as string,",
+				"          Price as float,",
+				"          ISBN as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          Customer_ID as string,",
+				"          Customer_Name as string,",
+				"          Email as string,",
+				"          Age_Group as string,",
+				"          Location as string,",
+				"          Member_Since as string,",
+				"          Active_Status as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source(output(",
+				"          Date_ID as string,",
+				"          Date as string,",
+				"          Day_of_Week as string,",
+				"          Month as string,",
+				"          Year as string,",
+				"          Quarter as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source3",
+				"source(output(",
+				"          Sale_ID as string,",
+				"          Customer_ID as string,",
+				"          Book_ID as string,",
+				"          Date_ID as string,",
+				"          Store_ID as string,",
+				"          Quantity_Sold as string,",
+				"          Sale_Amount as string,",
+				"          Discount_Applied as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source4",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          BOOK_ID as string,",
+				"          BOOK_TITLE as string,",
+				"          AUTHOR as string,",
+				"          GENRE as string,",
+				"          PUBLISHER as string,",
+				"          PRICE as string,",
+				"          ISBN as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          BOOK_ID = Book_ID,",
+				"          BOOK_TITLE = Book_Title,",
+				"          AUTHOR = Author,",
+				"          GENRE = Genre,",
+				"          PUBLISHER = Publisher,",
+				"          PRICE = Price,",
+				"          ISBN",
+				"     )) ~> sink1",
+				"source2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CUSTOMER_ID as string,",
+				"          CUSTOMER_NAME as string,",
+				"          EMAIL as string,",
+				"          AGE_GROUP as string,",
+				"          LOCATION as string,",
+				"          MEMBER_SINCE as string,",
+				"          ACTIVE_STATUS as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true) ~> sink2",
+				"source3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          DATE_ID as string,",
+				"          DATE as string,",
+				"          DAY_OF_WEEK as string,",
+				"          MONTH as string,",
+				"          YEAR as string,",
+				"          QUARTER as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true) ~> sink3",
+				"source4 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SALE_ID as string,",
+				"          CUSTOMER_ID as string,",
+				"          BOOK_ID as string,",
+				"          DATE_ID as string,",
+				"          STORE_ID as string,",
+				"          QUANTITY_SOLD as string,",
+				"          SALE_AMOUNT as string,",
+				"          DISCOUNT_APPLIED as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true) ~> sink4"
+			]
+		}
+	}
+}

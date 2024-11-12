@@ -1,0 +1,143 @@
+{
+	"name": "pipeline2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SnowflakeV2Sink",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand"
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "linkedService2",
+							"type": "LinkedServiceReference"
+						},
+						"path": "book"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Book_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BOOK_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Book_Title",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BOOK_TITLE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Author",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AUTHOR",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Genre",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GENRE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Publisher",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PUBLISHER",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Price",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PRICE",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "ISBN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ISBN",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "SnowflakeTable1",
+						"type": "DatasetReference",
+						"parameters": {
+							"tablename": {
+								"value": "SILVER_BOOK",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-11-12T08:08:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

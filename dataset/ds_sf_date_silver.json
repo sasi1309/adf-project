@@ -1,0 +1,44 @@
+{
+	"name": "ds_sf_date_silver",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sf_book_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "DATE_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DATE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DAY_OF_WEEK",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "MONTH",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "YEAR",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "QUARTER",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "PUBLIC",
+			"table": "SILVER_DATE"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

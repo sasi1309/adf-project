@@ -1,0 +1,57 @@
+{
+	"name": "ds_bl_sales_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_bl_book_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Sales.csv",
+				"container": "book"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Sale_ID",
+				"type": "String"
+			},
+			{
+				"name": "Customer_ID",
+				"type": "String"
+			},
+			{
+				"name": "Book_ID",
+				"type": "String"
+			},
+			{
+				"name": "Date_ID",
+				"type": "String"
+			},
+			{
+				"name": "Store_ID",
+				"type": "String"
+			},
+			{
+				"name": "Quantity_Sold",
+				"type": "String"
+			},
+			{
+				"name": "Sale_Amount",
+				"type": "String"
+			},
+			{
+				"name": "Discount_Applied",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,56 @@
+{
+	"name": "ds_sf_sales_silver",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sf_book_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "SALE_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "CUSTOMER_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "BOOK_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DATE_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "STORE_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "QUANTITY_SOLD",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "SALE_AMOUNT",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DISCOUNT_APPLIED",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "PUBLIC",
+			"table": "SILVER_SALES"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

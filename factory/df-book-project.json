@@ -1,0 +1,9 @@
+{
+	"name": "df-book-project",
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "665ef85a-cbf7-496b-8316-f8bf9c4141dc",
+		"tenantId": "112e211e-9348-485d-9e3e-75a1c15b6489"
+	}
+}

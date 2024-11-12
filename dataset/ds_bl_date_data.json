@@ -1,0 +1,49 @@
+{
+	"name": "ds_bl_date_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_bl_book_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Date.csv",
+				"container": "book"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Date_ID",
+				"type": "String"
+			},
+			{
+				"name": "Date",
+				"type": "String"
+			},
+			{
+				"name": "Day_of_Week",
+				"type": "String"
+			},
+			{
+				"name": "Month",
+				"type": "String"
+			},
+			{
+				"name": "Year",
+				"type": "String"
+			},
+			{
+				"name": "Quarter",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
