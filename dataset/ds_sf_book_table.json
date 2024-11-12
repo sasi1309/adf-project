@@ -43,5 +43,6 @@
 			"schema": "PUBLIC",
 			"table": "SILVER_BOOK"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }
