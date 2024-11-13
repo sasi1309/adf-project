@@ -1,0 +1,202 @@
+{
+	"name": "pl_book",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SnowflakeV2Sink",
+						"preCopyScript": "TRUNCATE TABLE BOOKS.PUBLIC.RAW_BOOK",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand"
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "linkedService2",
+							"type": "LinkedServiceReference"
+						},
+						"path": "staging"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Book_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BOOK_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Book_Title",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BOOK_TITLE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Author",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AUTHOR",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Genre",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GENRE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Publisher",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PUBLISHER",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Price",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PRICE",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "ISBN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ISBN",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_bl_books_data",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_sf_book_raw",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_sf_book_data",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "TRUNCATE TABLE BOOKS.PUBLIC.SILVER_BOOK;\ncall clean_and_load_silver_book_data()"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Script2",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Script1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_sf_book_data",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "call load_gold_book_data();"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"annotations": []
+	}
+}

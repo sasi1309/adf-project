@@ -1,0 +1,212 @@
+{
+	"name": "pl_sales",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SnowflakeV2Sink",
+						"preCopyScript": "TRUNCATE TABLE BOOKS.PUBLIC.RAW_SALES;",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand"
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "linkedService2",
+							"type": "LinkedServiceReference"
+						},
+						"path": "staging"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Sale_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SALE_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Customer_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CUSTOMER_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Book_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BOOK_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Date_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATE_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Store_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "STORE_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Quantity_Sold",
+									"type": "String"
+								},
+								"sink": {
+									"name": "QUANTITY_SOLD",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "Sale_Amount",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SALE_AMOUNT",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "Discount_Applied",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DISCOUNT_APPLIED",
+									"type": "Int64"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_bl_sales_data",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_sf_sales_raw",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_sf_book_data",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "truncate table books.public.silver_sales;\ncall clean_and_load_silver_sales()"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Script2",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Script1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_sf_book_data",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "call load_gold_sales_data();"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"annotations": []
+	}
+}

@@ -1,0 +1,45 @@
+{
+	"name": "sf_customer_raw",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sf_book_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "CUSTOMER_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "CUSTOMER_NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "EMAIL",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "AGE_GROUP",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "LOCATION",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "MEMBER_SINCE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ACTIVE_STATUS",
+				"type": "BOOLEAN"
+			}
+		],
+		"typeProperties": {
+			"schema": "PUBLIC",
+			"table": "RAW_CUSTOMER"
+		}
+	}
+}

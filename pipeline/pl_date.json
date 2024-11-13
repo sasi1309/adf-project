@@ -1,0 +1,192 @@
+{
+	"name": "pl_date",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SnowflakeV2Sink",
+						"preCopyScript": "TRUNCATE table BOOKS.PUBLIC.RAW_date;",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand"
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "linkedService2",
+							"type": "LinkedServiceReference"
+						},
+						"path": "staging"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Date_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATE_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Date",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "Day_of_Week",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DAY_OF_WEEK",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Month",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MONTH",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String"
+								},
+								"sink": {
+									"name": "YEAR",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Quarter",
+									"type": "String"
+								},
+								"sink": {
+									"name": "QUARTER",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_bl_date_data",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_sf_date_raw",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_sf_book_data",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "TRUNCATE TABLE BOOKS.PUBLIC.SILVER_DATE;\ncall clean_and_load_raw_date();"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Script2",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Script1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_sf_book_data",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "call clean_and_load_gold_date();"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
