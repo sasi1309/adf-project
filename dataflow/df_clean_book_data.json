@@ -31,6 +31,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "source4"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_bl_store_data",
+						"type": "DatasetReference"
+					},
+					"name": "source5"
 				}
 			],
 			"sinks": [
@@ -61,6 +68,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "sink4"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sf_store_silver",
+						"type": "DatasetReference"
+					},
+					"name": "sink5"
 				}
 			],
 			"transformations": [],
@@ -113,6 +127,14 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source4",
+				"source(output(",
+				"          Store_ID as string,",
+				"          Store_Name as string,",
+				"          Store_Location as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source5",
 				"source1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -128,6 +150,7 @@
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
+				"     truncate:true,",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
@@ -156,10 +179,20 @@
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
+				"     truncate:true,",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     stageInsert: true) ~> sink2",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          CUSTOMER_ID = Customer_ID,",
+				"          CUSTOMER_NAME = Customer_Name,",
+				"          EMAIL = Email,",
+				"          AGE_GROUP = Age_Group,",
+				"          LOCATION = Location,",
+				"          MEMBER_SINCE = Member_Since,",
+				"          ACTIVE_STATUS = Active_Status",
+				"     )) ~> sink2",
 				"source3 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -174,10 +207,19 @@
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
+				"     truncate:true,",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     stageInsert: true) ~> sink3",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          DATE_ID = Date_ID,",
+				"          DATE = Date,",
+				"          DAY_OF_WEEK = Day_of_Week,",
+				"          MONTH = Month,",
+				"          YEAR = Year,",
+				"          QUARTER = Quarter",
+				"     )) ~> sink3",
 				"source4 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -194,10 +236,42 @@
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
+				"     truncate:true,",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     stageInsert: true) ~> sink4"
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          SALE_ID = Sale_ID,",
+				"          CUSTOMER_ID = Customer_ID,",
+				"          BOOK_ID = Book_ID,",
+				"          DATE_ID = Date_ID,",
+				"          STORE_ID = Store_ID,",
+				"          QUANTITY_SOLD = Quantity_Sold,",
+				"          SALE_AMOUNT = Sale_Amount,",
+				"          DISCOUNT_APPLIED = Discount_Applied",
+				"     )) ~> sink4",
+				"source5 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          STORE_ID as string,",
+				"          STORE_NAME as string,",
+				"          STORE_LOCATION as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          STORE_ID = Store_ID,",
+				"          STORE_NAME = Store_Name,",
+				"          STORE_LOCATION = Store_Location",
+				"     )) ~> sink5"
 			]
 		}
 	}

@@ -1,0 +1,36 @@
+{
+	"name": "ds_bl_store_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_bl_book_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Store.csv",
+				"container": "book"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Store_ID",
+				"type": "String"
+			},
+			{
+				"name": "Store_Name",
+				"type": "String"
+			},
+			{
+				"name": "Store_Location",
+				"type": "String"
+			}
+		]
+	}
+}
