@@ -13,41 +13,7 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/DelimitedText2')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_bl_book_data",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"files": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().files",
-							"type": "Expression"
-						},
-						"container": "book"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SnowflakeTable1')]",
+			"name": "[concat(parameters('factoryName'), '/ds_sf_store_silver')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -55,421 +21,31 @@
 					"referenceName": "ls_sf_book_data",
 					"type": "LinkedServiceReference"
 				},
-				"parameters": {
-					"tablename": {
-						"type": "string"
-					}
-				},
 				"annotations": [],
 				"type": "SnowflakeV2Table",
 				"schema": [
 					{
-						"name": "BOOK_ID",
+						"name": "STORE_ID",
 						"type": "VARCHAR"
 					},
 					{
-						"name": "BOOK_TITLE",
+						"name": "STORE_NAME",
 						"type": "VARCHAR"
 					},
 					{
-						"name": "AUTHOR",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "GENRE",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "PUBLISHER",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "PRICE",
-						"type": "NUMBER",
-						"precision": 38,
-						"scale": 0
-					},
-					{
-						"name": "ISBN",
+						"name": "STORE_LOCATION",
 						"type": "VARCHAR"
 					}
 				],
 				"typeProperties": {
 					"schema": "PUBLIC",
-					"table": {
-						"value": "@dataset().tablename",
-						"type": "Expression"
-					}
+					"table": "SILVER_STORE"
 				}
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_bl_book_data')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_bl_book_data",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"files": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().files",
-							"type": "Expression"
-						},
-						"container": "book"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_bl_books_data')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_bl_book_data",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "Book.csv",
-						"container": "book"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "Book_ID",
-						"type": "String"
-					},
-					{
-						"name": "Book_Title",
-						"type": "String"
-					},
-					{
-						"name": "Author",
-						"type": "String"
-					},
-					{
-						"name": "Genre",
-						"type": "String"
-					},
-					{
-						"name": "Publisher",
-						"type": "String"
-					},
-					{
-						"name": "Price",
-						"type": "String"
-					},
-					{
-						"name": "ISBN",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_bl_customer_data')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_bl_book_data",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "Customer.csv",
-						"container": "book"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "Customer_ID",
-						"type": "String"
-					},
-					{
-						"name": "Customer_Name",
-						"type": "String"
-					},
-					{
-						"name": "Email",
-						"type": "String"
-					},
-					{
-						"name": "Age_Group",
-						"type": "String"
-					},
-					{
-						"name": "Location",
-						"type": "String"
-					},
-					{
-						"name": "Member_Since",
-						"type": "String"
-					},
-					{
-						"name": "Active_Status",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_bl_date_data')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_bl_book_data",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "Date.csv",
-						"container": "book"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "Date_ID",
-						"type": "String"
-					},
-					{
-						"name": "Date",
-						"type": "String"
-					},
-					{
-						"name": "Day_of_Week",
-						"type": "String"
-					},
-					{
-						"name": "Month",
-						"type": "String"
-					},
-					{
-						"name": "Year",
-						"type": "String"
-					},
-					{
-						"name": "Quarter",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_bl_sales_data')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_bl_book_data",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "Sales.csv",
-						"container": "book"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "Sale_ID",
-						"type": "String"
-					},
-					{
-						"name": "Customer_ID",
-						"type": "String"
-					},
-					{
-						"name": "Book_ID",
-						"type": "String"
-					},
-					{
-						"name": "Date_ID",
-						"type": "String"
-					},
-					{
-						"name": "Store_ID",
-						"type": "String"
-					},
-					{
-						"name": "Quantity_Sold",
-						"type": "String"
-					},
-					{
-						"name": "Sale_Amount",
-						"type": "String"
-					},
-					{
-						"name": "Discount_Applied",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_http_book_data')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_http_book_data",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"files": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "HttpServerLocation",
-						"relativeUrl": {
-							"value": "@dataset().files",
-							"type": "Expression"
-						}
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_sf_book_data')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_sf_book_data",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"TableName": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "SnowflakeV2Table",
-				"schema": [],
-				"typeProperties": {
-					"schema": "PUBLIC",
-					"table": {
-						"value": "@dataset().TableName",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_sf_book_table')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_sf_book_data",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SnowflakeV2Table",
-				"schema": [
-					{
-						"name": "BOOK_ID",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "BOOK_TITLE",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "AUTHOR",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "GENRE",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "PUBLISHER",
-						"type": "VARCHAR"
-					},
-					{
-						"name": "PRICE",
-						"type": "NUMBER",
-						"precision": 38,
-						"scale": 0
-					},
-					{
-						"name": "ISBN",
-						"type": "VARCHAR"
-					}
-				],
-				"typeProperties": {
-					"schema": "PUBLIC",
-					"table": "SILVER_BOOK"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_sf_customer')]",
+			"name": "[concat(parameters('factoryName'), '/sf_customer_raw')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -511,13 +87,63 @@
 				],
 				"typeProperties": {
 					"schema": "PUBLIC",
-					"table": "SILVER_CUSTOMER"
+					"table": "RAW_CUSTOMER"
 				}
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_sf_date_silver')]",
+			"name": "[concat(parameters('factoryName'), '/ds_sf_book_raw')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sf_book_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SnowflakeV2Table",
+				"schema": [
+					{
+						"name": "BOOK_ID",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "BOOK_TITLE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "AUTHOR",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "GENRE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PUBLISHER",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "PRICE",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "ISBN",
+						"type": "VARCHAR"
+					}
+				],
+				"typeProperties": {
+					"schema": "PUBLIC",
+					"table": "RAW_BOOK"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sf_date_raw')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -557,13 +183,45 @@
 				],
 				"typeProperties": {
 					"schema": "PUBLIC",
-					"table": "SILVER_DATE"
+					"table": "RAW_DATE"
 				}
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_sf_sales_silver')]",
+			"name": "[concat(parameters('factoryName'), '/ds_sf_stores_raw')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sf_book_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SnowflakeV2Table",
+				"schema": [
+					{
+						"name": "STORE_ID",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "STORE_NAME",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "STORE_LOCATION",
+						"type": "VARCHAR"
+					}
+				],
+				"typeProperties": {
+					"schema": "PUBLIC",
+					"table": "RAW_STORE"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sf_sales_raw')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -603,19 +261,19 @@
 					{
 						"name": "SALE_AMOUNT",
 						"type": "NUMBER",
-						"precision": 38,
-						"scale": 0
+						"precision": 10,
+						"scale": 2
 					},
 					{
 						"name": "DISCOUNT_APPLIED",
 						"type": "NUMBER",
-						"precision": 38,
-						"scale": 0
+						"precision": 10,
+						"scale": 2
 					}
 				],
 				"typeProperties": {
 					"schema": "PUBLIC",
-					"table": "SILVER_SALES"
+					"table": "RAW_SALES"
 				}
 			},
 			"dependsOn": []
@@ -807,10 +465,7 @@
 				"annotations": [],
 				"lastPublishTime": "2024-11-12T08:08:41Z"
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_bl_book_data')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sf_book_data')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pipeline2')]",
@@ -959,9 +614,7 @@
 				"annotations": [],
 				"lastPublishTime": "2024-11-12T08:08:41Z"
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SnowflakeTable1')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pl_http_copy_book')]",
@@ -1071,10 +724,7 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_http_book_data')]",
-				"[concat(variables('factoryId'), '/datasets/DelimitedText2')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/df_clean_book_data')]",
@@ -1111,6 +761,13 @@
 								"type": "DatasetReference"
 							},
 							"name": "source4"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_bl_store_data",
+								"type": "DatasetReference"
+							},
+							"name": "source5"
 						}
 					],
 					"sinks": [
@@ -1141,6 +798,13 @@
 								"type": "DatasetReference"
 							},
 							"name": "sink4"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sf_store_silver",
+								"type": "DatasetReference"
+							},
+							"name": "sink5"
 						}
 					],
 					"transformations": [],
@@ -1193,6 +857,14 @@
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> source4",
+						"source(output(",
+						"          Store_ID as string,",
+						"          Store_Name as string,",
+						"          Store_Location as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source5",
 						"source1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
@@ -1208,6 +880,7 @@
 						"     insertable:true,",
 						"     updateable:false,",
 						"     upsertable:false,",
+						"     truncate:true,",
 						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
@@ -1236,10 +909,20 @@
 						"     insertable:true,",
 						"     updateable:false,",
 						"     upsertable:false,",
+						"     truncate:true,",
 						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     stageInsert: true) ~> sink2",
+						"     stageInsert: true,",
+						"     mapColumn(",
+						"          CUSTOMER_ID = Customer_ID,",
+						"          CUSTOMER_NAME = Customer_Name,",
+						"          EMAIL = Email,",
+						"          AGE_GROUP = Age_Group,",
+						"          LOCATION = Location,",
+						"          MEMBER_SINCE = Member_Since,",
+						"          ACTIVE_STATUS = Active_Status",
+						"     )) ~> sink2",
 						"source3 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
@@ -1254,10 +937,19 @@
 						"     insertable:true,",
 						"     updateable:false,",
 						"     upsertable:false,",
+						"     truncate:true,",
 						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     stageInsert: true) ~> sink3",
+						"     stageInsert: true,",
+						"     mapColumn(",
+						"          DATE_ID = Date_ID,",
+						"          DATE = Date,",
+						"          DAY_OF_WEEK = Day_of_Week,",
+						"          MONTH = Month,",
+						"          YEAR = Year,",
+						"          QUARTER = Quarter",
+						"     )) ~> sink3",
 						"source4 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
@@ -1274,22 +966,993 @@
 						"     insertable:true,",
 						"     updateable:false,",
 						"     upsertable:false,",
+						"     truncate:true,",
 						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     stageInsert: true) ~> sink4"
+						"     stageInsert: true,",
+						"     mapColumn(",
+						"          SALE_ID = Sale_ID,",
+						"          CUSTOMER_ID = Customer_ID,",
+						"          BOOK_ID = Book_ID,",
+						"          DATE_ID = Date_ID,",
+						"          STORE_ID = Store_ID,",
+						"          QUANTITY_SOLD = Quantity_Sold,",
+						"          SALE_AMOUNT = Sale_Amount,",
+						"          DISCOUNT_APPLIED = Discount_Applied",
+						"     )) ~> sink4",
+						"source5 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          STORE_ID as string,",
+						"          STORE_NAME as string,",
+						"          STORE_LOCATION as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     stageInsert: true,",
+						"     mapColumn(",
+						"          STORE_ID = Store_ID,",
+						"          STORE_NAME = Store_Name,",
+						"          STORE_LOCATION = Store_Location",
+						"     )) ~> sink5"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_bl_books_data')]",
-				"[concat(variables('factoryId'), '/datasets/ds_bl_customer_data')]",
-				"[concat(variables('factoryId'), '/datasets/ds_bl_date_data')]",
-				"[concat(variables('factoryId'), '/datasets/ds_bl_sales_data')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sf_book_table')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sf_customer')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sf_date_silver')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sf_sales_silver')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sf_store_silver')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_customer')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SnowflakeV2Sink",
+								"preCopyScript": "TRUNCATE TABLE Books.Public.raw_Customer;",
+								"importSettings": {
+									"type": "SnowflakeImportCopyCommand"
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "linkedService2",
+									"type": "LinkedServiceReference"
+								},
+								"path": "book"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_bl_customer_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "sf_customer_raw",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Script1",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sf_book_data",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "TRUNCATE TABLE BOOKS.PUBLIC.SILVER_CUSTOMER;\nCALL clean_and_copy_to_silver_customer_data();\n"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Script2",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Script1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sf_book_data",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "call merge_customer_data();"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/sf_customer_raw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_book')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SnowflakeV2Sink",
+								"preCopyScript": "TRUNCATE TABLE BOOKS.PUBLIC.RAW_BOOK",
+								"importSettings": {
+									"type": "SnowflakeImportCopyCommand"
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "linkedService2",
+									"type": "LinkedServiceReference"
+								},
+								"path": "staging"
+							},
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Book_ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "BOOK_ID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Book_Title",
+											"type": "String"
+										},
+										"sink": {
+											"name": "BOOK_TITLE",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Author",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AUTHOR",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Genre",
+											"type": "String"
+										},
+										"sink": {
+											"name": "GENRE",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Publisher",
+											"type": "String"
+										},
+										"sink": {
+											"name": "PUBLISHER",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Price",
+											"type": "String"
+										},
+										"sink": {
+											"name": "PRICE",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "ISBN",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ISBN",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_bl_books_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_sf_book_raw",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Script1",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sf_book_data",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "TRUNCATE TABLE BOOKS.PUBLIC.SILVER_BOOK;\ncall clean_and_load_silver_book_data()"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Script2",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Script1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sf_book_data",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "call load_gold_book_data();"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sf_book_raw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_date')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SnowflakeV2Sink",
+								"preCopyScript": "TRUNCATE table BOOKS.PUBLIC.RAW_date;",
+								"importSettings": {
+									"type": "SnowflakeImportCopyCommand"
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "linkedService2",
+									"type": "LinkedServiceReference"
+								},
+								"path": "staging"
+							},
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Date_ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DATE_ID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Date",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DATE",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Day_of_Week",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DAY_OF_WEEK",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Month",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MONTH",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Year",
+											"type": "String"
+										},
+										"sink": {
+											"name": "YEAR",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Quarter",
+											"type": "String"
+										},
+										"sink": {
+											"name": "QUARTER",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_bl_date_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_sf_date_raw",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Script1",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sf_book_data",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "TRUNCATE TABLE BOOKS.PUBLIC.SILVER_DATE;\ncall clean_and_load_raw_date();"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Script2",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Script1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sf_book_data",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "call clean_and_load_gold_date();"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sf_date_raw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_stores')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SnowflakeV2Sink",
+								"preCopyScript": "TRUNCATE TABLE BOOKS.PUBLIC.RAW_STORE;",
+								"importSettings": {
+									"type": "SnowflakeImportCopyCommand"
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "linkedService2",
+									"type": "LinkedServiceReference"
+								},
+								"path": "staging"
+							},
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Store_ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "STORE_ID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Store_Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "STORE_NAME",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Store_Location",
+											"type": "String"
+										},
+										"sink": {
+											"name": "STORE_LOCATION",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_bl_store_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_sf_stores_raw",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Script1",
+						"description": "TRUNCATE TABLE BOOKS.PUBLIC.SILVER_STORE;\ncall clean_and_load_raw_store();",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sf_book_data",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "TRUNCATE TABLE BOOKS.PUBLIC.SILVER_STORE;\ncall clean_and_load_raw_store();"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Script2",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Script1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sf_book_data",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "call load_gold_store()"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sf_stores_raw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_sales')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SnowflakeV2Sink",
+								"preCopyScript": "TRUNCATE TABLE BOOKS.PUBLIC.RAW_SALES;",
+								"importSettings": {
+									"type": "SnowflakeImportCopyCommand"
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "linkedService2",
+									"type": "LinkedServiceReference"
+								},
+								"path": "staging"
+							},
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Sale_ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "SALE_ID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Customer_ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "CUSTOMER_ID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Book_ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "BOOK_ID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Date_ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DATE_ID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Store_ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "STORE_ID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Quantity_Sold",
+											"type": "String"
+										},
+										"sink": {
+											"name": "QUANTITY_SOLD",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "Sale_Amount",
+											"type": "String"
+										},
+										"sink": {
+											"name": "SALE_AMOUNT",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "Discount_Applied",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DISCOUNT_APPLIED",
+											"type": "Int64"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_bl_sales_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_sf_sales_raw",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Script1",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sf_book_data",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "truncate table books.public.silver_sales;\ncall clean_and_load_silver_sales()"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Script2",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Script1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sf_book_data",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "call load_gold_sales_data();"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sf_sales_raw')]"
 			]
 		}
 	]

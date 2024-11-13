@@ -23,13 +23,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'sasUri' of 'ls_bl_book_data'"
 		},
-		"ls_sf_book_data_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "BOOKS"
-		},
 		"ls_http_book_data_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com"
+		},
+		"ls_sf_book_data_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "BOOKS"
 		},
 		"containerUri": {
 			"type": "string",
@@ -70,11 +70,11 @@
 					"ls_bl_book_data_sasUri": {
 						"value": "[parameters('ls_bl_book_data_sasUri')]"
 					},
-					"ls_sf_book_data_properties_typeProperties_database": {
-						"value": "[parameters('ls_sf_book_data_properties_typeProperties_database')]"
-					},
 					"ls_http_book_data_properties_typeProperties_url": {
 						"value": "[parameters('ls_http_book_data_properties_typeProperties_url')]"
+					},
+					"ls_sf_book_data_properties_typeProperties_database": {
+						"value": "[parameters('ls_sf_book_data_properties_typeProperties_database')]"
 					}
 				}
 			},

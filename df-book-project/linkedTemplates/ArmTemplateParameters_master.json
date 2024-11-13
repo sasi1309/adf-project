@@ -17,11 +17,11 @@
 		"ls_bl_book_data_sasUri": {
 			"value": ""
 		},
-		"ls_sf_book_data_properties_typeProperties_database": {
-			"value": "BOOKS"
-		},
 		"ls_http_book_data_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com"
+		},
+		"ls_sf_book_data_properties_typeProperties_database": {
+			"value": "BOOKS"
 		},
 		"containerUri": {
 			"value": ""
