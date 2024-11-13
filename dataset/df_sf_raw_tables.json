@@ -1,0 +1,24 @@
+{
+	"name": "df_sf_raw_tables",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sf_book_data",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [],
+		"typeProperties": {
+			"schema": "PUBLIC",
+			"table": {
+				"value": "@dataset().TableName",
+				"type": "Expression"
+			}
+		}
+	}
+}

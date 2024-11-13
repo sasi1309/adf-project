@@ -1,25 +1,13 @@
 {
-	"name": "ds_sf_book_data",
+	"name": "ds_sf_table_list",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sf_book_data",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"TableName": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
 		"type": "SnowflakeV2Table",
-		"schema": [],
-		"typeProperties": {
-			"schema": "PUBLIC",
-			"table": {
-				"value": "@dataset().TableName",
-				"type": "Expression"
-			}
-		}
+		"schema": []
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
