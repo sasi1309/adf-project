@@ -5,8 +5,6 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
@@ -16,82 +14,6 @@
 					},
 					"isSequential": true,
 					"activities": [
-						{
-							"name": "CopyDataToStorage",
-							"type": "Copy",
-							"dependsOn": [
-								{
-									"activity": "Web1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"source": {
-									"type": "DelimitedTextSource",
-									"storeSettings": {
-										"type": "HttpReadSettings",
-										"requestMethod": "GET"
-									},
-									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
-									}
-								},
-								"sink": {
-									"type": "DelimitedTextSink",
-									"storeSettings": {
-										"type": "AzureBlobStorageWriteSettings"
-									},
-									"formatSettings": {
-										"type": "DelimitedTextWriteSettings",
-										"quoteAllText": true,
-										"fileExtension": ".txt"
-									}
-								},
-								"enableStaging": false,
-								"translator": {
-									"type": "TabularTranslator",
-									"typeConversion": true,
-									"typeConversionSettings": {
-										"allowDataTruncation": true,
-										"treatBooleanAsNumber": false
-									}
-								}
-							},
-							"inputs": [
-								{
-									"referenceName": "ds_http_book_data",
-									"type": "DatasetReference",
-									"parameters": {
-										"files": {
-											"value": "@concat(item(), '_', utcNow('yyyy-MM-dd'), '.csv')",
-											"type": "Expression"
-										}
-									}
-								}
-							],
-							"outputs": [
-								{
-									"referenceName": "DelimitedText2",
-									"type": "DatasetReference",
-									"parameters": {
-										"files": {
-											"value": "@concat(item(), '_', utcNow('yyyy-MM-dd'), '.csv')\n",
-											"type": "Expression"
-										}
-									}
-								}
-							]
-						},
 						{
 							"name": "Web1",
 							"type": "WebActivity",
@@ -107,18 +29,159 @@
 							"typeProperties": {
 								"method": "GET",
 								"url": {
-									"value": "@concat('https://raw.githubusercontent.com/sasi1309/books/refs/heads/main/', item(), '_', utcNow('yyyy-MM-dd'), '.csv')\n",
+									"value": "@concat('https://raw.githubusercontent.com/sasi1309/books/refs/heads/main/', item(), '_', utcNow('yyyy-MM-dd'), '.csv')",
 									"type": "Expression"
 								}
+							}
+						},
+						{
+							"name": "IfCondition2",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Web1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@greater(length(activity('Web1').output.Response), 0)",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Wait1",
+										"type": "Wait",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"waitTimeInSeconds": 1
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "CopyDataToStorage",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "DelimitedTextSource",
+												"storeSettings": {
+													"type": "HttpReadSettings",
+													"requestMethod": "GET"
+												},
+												"formatSettings": {
+													"type": "DelimitedTextReadSettings"
+												}
+											},
+											"sink": {
+												"type": "DelimitedTextSink",
+												"storeSettings": {
+													"type": "AzureBlobStorageWriteSettings"
+												},
+												"formatSettings": {
+													"type": "DelimitedTextWriteSettings",
+													"quoteAllText": true,
+													"fileExtension": ".txt"
+												}
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_http_book_data",
+												"type": "DatasetReference",
+												"parameters": {
+													"files": {
+														"value": "@concat(item(), '_', utcNow('yyyy-MM-dd'), '.csv')",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "DelimitedText2",
+												"type": "DatasetReference",
+												"parameters": {
+													"files": {
+														"value": "@concat(item(), '_', utcNow('yyyy-MM-dd'), '.csv')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								]
+							}
+						},
+						{
+							"name": "Wait2",
+							"type": "Wait",
+							"dependsOn": [
+								{
+									"activity": "Web1",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 1
 							}
 						}
 					]
 				}
 			},
 			{
-				"name": "Web1_copy1",
-				"type": "WebActivity",
-				"dependsOn": [],
+				"name": "Wait3",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Failed",
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			},
+			{
+				"name": "List Tables_copy1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Wait3",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -128,19 +191,26 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"method": "GET",
-					"url": {
-						"value": "https://raw.githubusercontent.com/sasi1309/books/refs/heads/main/Date_2024-11-14.csv",
-						"type": "Expression"
-					}
+					"source": {
+						"type": "SnowflakeV2Source",
+						"query": "SELECT TABLE_NAME\nFROM INFORMATION_SCHEMA.TABLES\nWHERE TABLE_NAME LIKE 'RAW%'\n  AND TABLE_SCHEMA = 'PUBLIC'  \n  AND TABLE_CATALOG = 'BOOKS'   AND TABLE_TYPE = 'BASE TABLE';",
+						"exportSettings": {
+							"type": "SnowflakeExportCopyCommand"
+						}
+					},
+					"dataset": {
+						"referenceName": "ds_sf_table_list",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
 				}
 			},
 			{
-				"name": "If Condition1",
-				"type": "IfCondition",
+				"name": "ForEach1_copy1",
+				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Web1_copy1",
+						"activity": "List Tables_copy1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -148,10 +218,209 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"expression": {
-						"value": "@greater(length(activity('WebActivity').output.Response), 0)\n",
+					"items": {
+						"value": "@activity('List Tables_copy1').output.value",
 						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Get Metadata1",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "ds_bl_book_data",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@concat(\n    toUpper(substring(replace(item().Table_Name, 'RAW_', ''), 0, 1)),\n    toLower(substring(replace(item().Table_Name, 'RAW_', ''), 1, add(length(replace(item().Table_Name, 'RAW_', '')), -1))),\n    '_',\n    utcNow('yyyy-MM-dd'),\n    '.csv'\n)\n",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"exists"
+								],
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Get Metadata1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@activity('Get Metadata1').output.exists\n",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Wait4",
+										"type": "Wait",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"waitTimeInSeconds": 1
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Copy data1_copy1",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "DelimitedTextSource",
+												"storeSettings": {
+													"type": "AzureBlobStorageReadSettings",
+													"recursive": true,
+													"enablePartitionDiscovery": false
+												},
+												"formatSettings": {
+													"type": "DelimitedTextReadSettings"
+												}
+											},
+											"sink": {
+												"type": "SnowflakeV2Sink",
+												"importSettings": {
+													"type": "SnowflakeImportCopyCommand"
+												}
+											},
+											"enableStaging": true,
+											"stagingSettings": {
+												"linkedServiceName": {
+													"referenceName": "linkedService2",
+													"type": "LinkedServiceReference"
+												},
+												"path": "staging"
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_bl_book_data",
+												"type": "DatasetReference",
+												"parameters": {
+													"FileName": {
+														"value": "@concat(\n    toUpper(substring(replace(item().Table_Name, 'RAW_', ''), 0, 1)),\n    toLower(substring(replace(item().Table_Name, 'RAW_', ''), 1, add(length(replace(item().Table_Name, 'RAW_', '')), -1))),\n    '_',\n    utcNow('yyyy-MM-dd'),\n    '.csv'\n)\n",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "df_sf_raw_tables",
+												"type": "DatasetReference",
+												"parameters": {
+													"TableName": {
+														"value": "@item().TABLE_NAME",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "ForEach1_copy1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_sf_book_data",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "call clean_and_load_silver_book_data();\ncall clean_and_copy_to_silver_customer_data();\ncall clean_and_load_raw_date();\ncall clean_and_load_silver_sales();\ncall clean_and_load_raw_store();\n\n\n"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Script2",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Script1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_sf_book_data",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "call load_gold_book_data();\ncall merge_customer_data();\ncall clean_and_load_gold_date();\ncall load_gold_sales_data();\ncall load_gold_store();\n"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
 				}
 			}
 		],

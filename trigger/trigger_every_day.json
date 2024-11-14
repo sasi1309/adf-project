@@ -1,0 +1,24 @@
+{
+	"name": "trigger_every_day",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_http_copy_book",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2024-11-14T00:00:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}
