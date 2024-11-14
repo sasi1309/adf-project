@@ -325,6 +325,81 @@
 													"type": "LinkedServiceReference"
 												},
 												"path": "staging"
+											},
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "Book_ID",
+															"type": "String"
+														},
+														"sink": {
+															"name": "BOOK_ID",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Book_Title",
+															"type": "String"
+														},
+														"sink": {
+															"name": "BOOK_TITLE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Author",
+															"type": "String"
+														},
+														"sink": {
+															"name": "AUTHOR",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Genre",
+															"type": "String"
+														},
+														"sink": {
+															"name": "GENRE",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Publisher",
+															"type": "String"
+														},
+														"sink": {
+															"name": "PUBLISHER",
+															"type": "String"
+														}
+													},
+													{
+														"source": {
+															"name": "Price",
+															"type": "String"
+														},
+														"sink": {
+															"name": "PRICE",
+															"type": "Int64"
+														}
+													},
+													{
+														"source": {
+															"name": "ISBN",
+															"type": "String"
+														},
+														"sink": {
+															"name": "ISBN",
+															"type": "String"
+														}
+													}
+												]
 											}
 										},
 										"inputs": [
@@ -385,7 +460,7 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "call clean_and_load_silver_book_data();\ncall clean_and_copy_to_silver_customer_data();\ncall clean_and_load_raw_date();\ncall clean_and_load_silver_sales();\ncall clean_and_load_raw_store();\n\n\n"
+							"text": "call clean_and_load_silver_book_data();\ncall clean_and_copy_to_silver_customer_data();\ncall clean_and_load_raw_date();\ncall clean_and_load_raw_store();\ncall clean_and_load_silver_sales();\n\n\n"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
