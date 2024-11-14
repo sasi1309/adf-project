@@ -5,6 +5,8 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
@@ -17,7 +19,14 @@
 						{
 							"name": "CopyDataToStorage",
 							"type": "Copy",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "Web1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -64,7 +73,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"files": {
-											"value": "@concat('/sasi1309/books/refs/heads/main/', item())\n",
+											"value": "@concat(item(), '_', utcNow('yyyy-MM-dd'), '.csv')",
 											"type": "Expression"
 										}
 									}
@@ -76,14 +85,73 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"files": {
-											"value": "@replace(replace(item(), 'Dim_', ''), 'Fact_', '')\n",
+											"value": "@concat(item(), '_', utcNow('yyyy-MM-dd'), '.csv')\n",
 											"type": "Expression"
 										}
 									}
 								}
 							]
+						},
+						{
+							"name": "Web1",
+							"type": "WebActivity",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"method": "GET",
+								"url": {
+									"value": "@concat('https://raw.githubusercontent.com/sasi1309/books/refs/heads/main/', item(), '_', utcNow('yyyy-MM-dd'), '.csv')\n",
+									"type": "Expression"
+								}
+							}
 						}
 					]
+				}
+			},
+			{
+				"name": "Web1_copy1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": {
+						"value": "https://raw.githubusercontent.com/sasi1309/books/refs/heads/main/Date_2024-11-14.csv",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Web1_copy1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(length(activity('WebActivity').output.Response), 0)\n",
+						"type": "Expression"
+					}
 				}
 			}
 		],
@@ -91,11 +159,11 @@
 			"files": {
 				"type": "array",
 				"defaultValue": [
-					"Dim_Book.csv",
-					"Dim_Customer.csv",
-					"Dim_Date (1).csv",
-					"Dim_Store.csv",
-					"Fact_Sales.csv"
+					"Book",
+					"Customer",
+					"Date",
+					"Store",
+					"Sales"
 				]
 			}
 		},

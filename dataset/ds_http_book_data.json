@@ -5,14 +5,23 @@
 			"referenceName": "ls_http_book_data",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"files": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "HttpServerLocation",
-				"relativeUrl": "/sasi1309/books/refs/heads/main"
+				"relativeUrl": {
+					"value": "@concat('/sasi1309/books/refs/heads/main/',dataset().files)",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
+			"rowDelimiter": "\n",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
