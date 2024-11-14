@@ -7,7 +7,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Copy data2",
+						"activity": "CopyDataFromSourceToADLS",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -167,7 +167,7 @@
 				}
 			},
 			{
-				"name": "Copy data2",
+				"name": "CopyDataFromSourceToADLS",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
