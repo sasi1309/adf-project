@@ -138,7 +138,10 @@
 						"referenceName": "ds_bl_books_data",
 						"type": "DatasetReference",
 						"parameters": {
-							"filename": "@concat('Book_', utcNow('yyyy-MM-dd'), '.csv')"
+							"filename": {
+								"value": "@concat('Sales_', utcNow('yyyy-MM-dd'), '.csv')",
+								"type": "Expression"
+							}
 						}
 					}
 				],
