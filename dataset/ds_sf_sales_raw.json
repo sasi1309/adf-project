@@ -48,8 +48,8 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "PUBLIC",
-			"table": "RAW_SALES"
+			"schema": "RAW",
+			"table": "SALES"
 		}
 	}
 }

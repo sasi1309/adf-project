@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "pl_sales",
+					"referenceName": "pl_load_raw_sales_to_gold",
 					"type": "PipelineReference"
 				}
 			}

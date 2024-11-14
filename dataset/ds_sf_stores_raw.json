@@ -22,8 +22,8 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "PUBLIC",
-			"table": "RAW_STORE"
+			"schema": "RAW",
+			"table": "STORE"
 		}
 	}
 }

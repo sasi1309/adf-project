@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "pl_book",
+					"referenceName": "pl_load_raw_book_to_gold",
 					"type": "PipelineReference"
 				}
 			}

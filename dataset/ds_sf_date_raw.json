@@ -36,8 +36,8 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "PUBLIC",
-			"table": "RAW_DATE"
+			"schema": "RAW",
+			"table": "DATE"
 		}
 	}
 }

@@ -1,13 +1,13 @@
 {
-	"name": "pl_book",
+	"name": "pl_load_raw_book_to_gold",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "CopyDataFromAdLSToRaw",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Copy data2",
+						"activity": "CopyDataFromSourceToADLS",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -143,11 +143,11 @@
 				]
 			},
 			{
-				"name": "Script1",
+				"name": "ScriptToLoadIntoSilver",
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "Copy data1",
+						"activity": "CopyDataFromAdLSToRaw",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -169,18 +169,18 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "call clean_and_load_silver_book_data();"
+							"text": "call BOOKS.SILVER.clean_and_load_silver_book_data();"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
 				}
 			},
 			{
-				"name": "Script2",
+				"name": "ScriptToLoadIntoGold",
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "Script1",
+						"activity": "ScriptToLoadIntoSilver",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -202,14 +202,14 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "call load_gold_book_data();"
+							"text": "call BOOKS.GOLD.load_gold_book_data();"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
 				}
 			},
 			{
-				"name": "Copy data2",
+				"name": "CopyDataFromSourceToADLS",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {

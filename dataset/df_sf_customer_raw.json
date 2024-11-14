@@ -1,5 +1,5 @@
 {
-	"name": "sf_customer_raw",
+	"name": "df_sf_customer_raw",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sf_book_data",
@@ -38,8 +38,8 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "PUBLIC",
-			"table": "RAW_CUSTOMER"
+			"schema": "RAW",
+			"table": "CUSTOMER"
 		}
 	}
 }

@@ -40,8 +40,8 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "PUBLIC",
-			"table": "RAW_BOOK"
+			"schema": "RAW",
+			"table": "BOOK"
 		}
 	}
 }

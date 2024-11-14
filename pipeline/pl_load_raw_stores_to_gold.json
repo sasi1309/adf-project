@@ -1,9 +1,9 @@
 {
-	"name": "pl_stores",
+	"name": "pl_load_raw_stores_to_gold",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "CopyDataFromAdLSToRaw",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -100,12 +100,12 @@
 				]
 			},
 			{
-				"name": "Script1",
-				"description": "call clean_and_load_raw_store();",
+				"name": "ScriptToLoadIntoSilver",
+				"description": "clean_and_load_silver_store();",
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "Copy data1",
+						"activity": "CopyDataFromAdLSToRaw",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -127,18 +127,18 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "TRUNCATE TABLE BOOKS.PUBLIC.SILVER_STORE;\ncall clean_and_load_raw_store();"
+							"text": "\ncall BOOKS.SILVER.clean_and_load_silver_store();"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
 				}
 			},
 			{
-				"name": "Script2",
+				"name": "ScriptToLoadIntoGold",
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "Script1",
+						"activity": "ScriptToLoadIntoSilver",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -160,7 +160,7 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "call load_gold_store()"
+							"text": "call BOOKS.GOLD.load_gold_store()"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"

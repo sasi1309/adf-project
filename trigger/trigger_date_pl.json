@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "pl_date",
+					"referenceName": "pl_load_raw_date_to_gold",
 					"type": "PipelineReference"
 				}
 			}

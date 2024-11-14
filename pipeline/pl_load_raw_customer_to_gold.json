@@ -1,13 +1,13 @@
 {
-	"name": "pl_customer",
+	"name": "pl_load_raw_customer_to_gold",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "CopyDataFromAdLSToRaw",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Copy data2",
+						"activity": "CopyDataFromSourceToADLS",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -46,6 +46,71 @@
 							"type": "LinkedServiceReference"
 						},
 						"path": "book"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Customer_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CUSTOMER_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Customer_Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CUSTOMER_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Email",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EMAIL",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Age_Group",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AGE_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Location",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LOCATION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Member_Since",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MEMBER_SINCE",
+									"type": "String"
+								}
+							}
+						]
 					}
 				},
 				"inputs": [
@@ -59,17 +124,17 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "sf_customer_raw",
+						"referenceName": "df_sf_customer_raw",
 						"type": "DatasetReference"
 					}
 				]
 			},
 			{
-				"name": "Script1",
+				"name": "ScriptToLoadIntoSilver",
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "Copy data1",
+						"activity": "CopyDataFromAdLSToRaw",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -91,18 +156,18 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "CALL clean_and_copy_to_silver_customer_data();\n"
+							"text": "CALL BOOKS.SILVER.clean_and_copy_to_silver_customer_data();\n"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
 				}
 			},
 			{
-				"name": "Script2",
+				"name": "ScriptToLoadIntoGold",
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "Script1",
+						"activity": "ScriptToLoadIntoSilver",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -124,14 +189,14 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "call merge_customer_data();"
+							"text": "call BOOKS.GOLD.merge_customer_data();"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
 				}
 			},
 			{
-				"name": "Copy data2",
+				"name": "CopyDataFromSourceToADLS",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {

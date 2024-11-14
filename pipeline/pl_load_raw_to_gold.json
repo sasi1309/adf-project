@@ -1,5 +1,5 @@
 {
-	"name": "pl_http_copy_book",
+	"name": "pl_load_raw_to_gold",
 	"properties": {
 		"activities": [
 			{
@@ -222,6 +222,7 @@
 						"value": "@activity('List Tables_copy1').output.value",
 						"type": "Expression"
 					},
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "Get Metadata1",
@@ -236,16 +237,6 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"dataset": {
-									"referenceName": "ds_bl_book_data",
-									"type": "DatasetReference",
-									"parameters": {
-										"FileName": {
-											"value": "@concat(\n    toUpper(substring(replace(item().Table_Name, 'RAW_', ''), 0, 1)),\n    toLower(substring(replace(item().Table_Name, 'RAW_', ''), 1, add(length(replace(item().Table_Name, 'RAW_', '')), -1))),\n    '_',\n    utcNow('yyyy-MM-dd'),\n    '.csv'\n)\n",
-											"type": "Expression"
-										}
-									}
-								},
 								"fieldList": [
 									"exists"
 								],
@@ -402,18 +393,6 @@
 												]
 											}
 										},
-										"inputs": [
-											{
-												"referenceName": "ds_bl_book_data",
-												"type": "DatasetReference",
-												"parameters": {
-													"FileName": {
-														"value": "@concat(\n    toUpper(substring(replace(item().Table_Name, 'RAW_', ''), 0, 1)),\n    toLower(substring(replace(item().Table_Name, 'RAW_', ''), 1, add(length(replace(item().Table_Name, 'RAW_', '')), -1))),\n    '_',\n    utcNow('yyyy-MM-dd'),\n    '.csv'\n)\n",
-														"type": "Expression"
-													}
-												}
-											}
-										],
 										"outputs": [
 											{
 												"referenceName": "df_sf_raw_tables",
