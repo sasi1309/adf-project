@@ -3,6 +3,58 @@
 	"properties": {
 		"activities": [
 			{
+				"name": "Get Metadata1",
+				"type": "GetMetadata",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_bl_book_data",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Metadata1').output.childItems",
+						"type": "Expression"
+					}
+				}
+			},
+			{
 				"name": "Copy data1",
 				"type": "Copy",
 				"dependsOn": [],
@@ -18,120 +70,44 @@
 					"source": {
 						"type": "DelimitedTextSource",
 						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextReadSettings"
 						}
 					},
 					"sink": {
-						"type": "SnowflakeV2Sink",
-						"importSettings": {
-							"type": "SnowflakeImportCopyCommand"
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
 						}
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "linkedService2",
-							"type": "LinkedServiceReference"
-						},
-						"path": "book"
-					},
+					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "Book_ID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "BOOK_ID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Book_Title",
-									"type": "String"
-								},
-								"sink": {
-									"name": "BOOK_TITLE",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Author",
-									"type": "String"
-								},
-								"sink": {
-									"name": "AUTHOR",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Genre",
-									"type": "String"
-								},
-								"sink": {
-									"name": "GENRE",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Publisher",
-									"type": "String"
-								},
-								"sink": {
-									"name": "PUBLISHER",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Price",
-									"type": "String"
-								},
-								"sink": {
-									"name": "PRICE",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"name": "ISBN",
-									"type": "String"
-								},
-								"sink": {
-									"name": "ISBN",
-									"type": "String"
-								}
-							}
-						]
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
 					}
 				},
 				"inputs": [
 					{
-						"referenceName": "DelimitedText1",
+						"referenceName": "ds_http_book_data",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "SnowflakeTable1",
-						"type": "DatasetReference",
-						"parameters": {
-							"tablename": {
-								"value": "SILVER_BOOK",
-								"type": "Expression"
-							}
-						}
+						"referenceName": "ds_bl_book_data",
+						"type": "DatasetReference"
 					}
 				]
 			}

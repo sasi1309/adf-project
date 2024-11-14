@@ -132,22 +132,13 @@
 							"inputs": [
 								{
 									"referenceName": "ds_bl_book_data",
-									"type": "DatasetReference",
-									"parameters": {
-										"files": {
-											"value": "@replace(item(), '\"', '')",
-											"type": "Expression"
-										}
-									}
+									"type": "DatasetReference"
 								}
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_sf_book_data",
-									"type": "DatasetReference",
-									"parameters": {
-										"TableName": "SILVER_BOOK"
-									}
+									"referenceName": "ds_sf_table_list",
+									"type": "DatasetReference"
 								}
 							]
 						}

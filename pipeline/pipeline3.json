@@ -5,6 +5,8 @@
 			{
 				"name": "List Tables",
 				"type": "Lookup",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -32,6 +34,8 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "List Tables",
@@ -63,8 +67,9 @@
 								"source": {
 									"type": "DelimitedTextSource",
 									"storeSettings": {
-										"type": "HttpReadSettings",
-										"requestMethod": "GET"
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
 									},
 									"formatSettings": {
 										"type": "DelimitedTextReadSettings"
@@ -80,8 +85,14 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "ds_http_book_data",
-									"type": "DatasetReference"
+									"referenceName": "ds_bl_book_data",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@concat(replace(item().tableName, 'raw_', ''), '_', utcNow('yyyy-MM-dd'), '.csv')\n",
+											"type": "Expression"
+										}
+									}
 								}
 							],
 							"outputs": [
