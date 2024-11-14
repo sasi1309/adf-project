@@ -10,7 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Sales.csv",
+				"fileName": {
+					"value": "@concat('Sales_', utcNow('yyyy-MM-dd'), '.csv')",
+					"type": "Expression"
+				},
 				"container": "book"
 			},
 			"columnDelimiter": ",",
