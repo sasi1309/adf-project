@@ -26,36 +26,7 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "Book_ID",
-				"type": "String"
-			},
-			{
-				"name": "Book_Title",
-				"type": "String"
-			},
-			{
-				"name": "Author",
-				"type": "String"
-			},
-			{
-				"name": "Genre",
-				"type": "String"
-			},
-			{
-				"name": "Publisher",
-				"type": "String"
-			},
-			{
-				"name": "Price",
-				"type": "String"
-			},
-			{
-				"name": "ISBN",
-				"type": "String"
-			}
-		]
+		"schema": []
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }

@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "ForEach1",
+				"name": "ForEachToCopyAllFilesToADLS",
 				"type": "ForEach",
 				"dependsOn": [],
 				"userProperties": [],
@@ -155,11 +155,11 @@
 				}
 			},
 			{
-				"name": "Wait3",
+				"name": "Wait",
 				"type": "Wait",
 				"dependsOn": [
 					{
-						"activity": "ForEach1",
+						"activity": "ForEachToCopyAllFilesToADLS",
 						"dependencyConditions": [
 							"Failed",
 							"Succeeded"
@@ -172,11 +172,11 @@
 				}
 			},
 			{
-				"name": "List Tables_copy1",
+				"name": "ListOFTablesInSnowflake",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Wait3",
+						"activity": "Wait",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -206,11 +206,11 @@
 				}
 			},
 			{
-				"name": "ForEach1_copy1",
+				"name": "ForEachToCopyFilesFromADLSToRaw",
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "List Tables_copy1",
+						"activity": "ListOFTablesInSnowflake",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -413,11 +413,11 @@
 				}
 			},
 			{
-				"name": "Script1",
+				"name": "ToCallAllProceduresToloadToSilver",
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "ForEach1_copy1",
+						"activity": "ForEachToCopyFilesFromADLSToRaw",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -446,11 +446,11 @@
 				}
 			},
 			{
-				"name": "Script2",
+				"name": "ToCallAllProceduresToloadToGold",
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "Script1",
+						"activity": "ToCallAllProceduresToloadToSilver",
 						"dependencyConditions": [
 							"Succeeded"
 						]
